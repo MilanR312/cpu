@@ -17,17 +17,19 @@ ma memory address, register that allows direct memory access
 --m == memory
 --i == imediate
 
-math:
+math_single:
 incr r
-add r, r/i
 decr r
+not r
+
+math_double
+add r, r/i
 sub r, r/i
 mul r, r,i
 
 and r, r/i
 or  r, r/i
 xor r, r/i
-not r
 cmp r, r/i
 
 moves:
@@ -50,14 +52,28 @@ z == do when zero flag is set
 n == do when negative
 xNZS
 allow multiple suffixes
+eq suffix == z
+lt suffix == n
 # instruction layout
+MathSingles
+MathDoubles
+Moves
+RamMoves
+Stack
+Jump
+
+
 #### math
+###### mathSingle
+AAAB 0001 11CC CDDD
+##### mathDouble
 AAAB 000C CCCD DEEE
 A: conditionals
 B: update flags
 C: instruction
 D: register
 F: Register or if all 1 then next 2xbyte as immediate
+x: off = math signles, on = math doubles
 
 #### moves
 mov:
@@ -69,6 +85,34 @@ AAAB 0010 1CCD DEEE
 same as above except for EEE as offset in either register or if 111 then next byte
 
 #### stack
-AAAB 0011 CC DDDD
+AAAB 0011 00CC 0DDD
 C: instruction
-DD: register or if all 1 then next bytes as immediate
+D: register or if all 1 then next bytes as immediate
+
+#### jump
+AAAB 1000 0000 0000 (jump to register?)
+
+### alu
+AABBB
+AA
+00 -> pass A
+01 -> pass B
+
+10 -> logic unit
+000 -> and
+001 -> or
+010 -> xor
+011 -> A
+100 -> nand
+101 -> nor
+110 -> xnor
+111 -> A'
+
+11 -> arithmetic unit
+000 -> A+B
+001 -> A-B
+010 -> A+1
+011 -> A-1
+100 -> A\*B
+
+mov nog is nachecken voor immediate erachter en of correcte path gekozen wordt
